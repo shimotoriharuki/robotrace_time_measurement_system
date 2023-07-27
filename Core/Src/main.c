@@ -80,13 +80,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if(GPIO_Pin == GPIO_PIN_7 && is_running == RESET){ //START
 		time = 0;
-		number_of_run++;
-
 		is_running = SET;
 
 		printf("Running...\r\n");
 	}
 	else if(GPIO_Pin == GPIO_PIN_0 && is_running == SET){ //GOAL
+		number_of_run++;
+
 		double record = time;
 
 		if(number_of_run == 1){
@@ -108,7 +108,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		is_running = RESET;
 
 		printf("%2d, %.4f\r\n", number_of_run, record);
-		printf("\r\nWaiting...\r\n");
+
+		if(number_of_run != 5){
+			printf("\r\nRun %2d, Waiting...\r\n", number_of_run + 1);
+		}
 	}
 }
 /* USER CODE END 0 */
@@ -151,7 +154,7 @@ int main(void)
   number_of_run = 0;
   printf("###Program Start###\r\n");
 
-  printf("\r\nWaiting...\r\n");
+  printf("\r\nRun 1, Waiting...\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -159,7 +162,7 @@ int main(void)
   while (1)
   {
 	  if(number_of_run == 5){
-		  printf("----Total Result----\r\n");
+		  printf("\r\n----Total Result----\r\n");
 		  printf("01: %.4f\r\n", first_time);
 		  printf("02: %.4f\r\n", second_time);
 		  printf("03: %.4f\r\n", third_time);
@@ -167,7 +170,7 @@ int main(void)
 		  printf("05: %.4f\r\n", fifth_time);
 		  printf("--------------------\r\n");
 
-		  printf("\r\nWaiting...\r\n");
+		  printf("\r\nRun 1, Waiting...\r\n");
 		  number_of_run = 0;
 	  }
 
