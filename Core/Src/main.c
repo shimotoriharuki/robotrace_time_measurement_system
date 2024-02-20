@@ -78,11 +78,19 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	if(GPIO_Pin == GPIO_PIN_7 && is_running == RESET){ //START
+	if(GPIO_Pin == GPIO_PIN_7){ //START
 		time = 0;
-		is_running = SET;
 
-		printf("Running...\r\n");
+		if(is_running == SET){ //走行中に反応したら一個前の走行はコースアウト判定
+			number_of_run++;
+			printf("Run %2d Course Out\r\n", number_of_run);
+			printf("\r\nRunning...\r\n");
+
+		}
+		else{ //正常に走行開始
+			is_running = SET;
+			printf("Running...\r\n");
+		}
 	}
 	else if(GPIO_Pin == GPIO_PIN_0 && is_running == SET){ //GOAL
 		number_of_run++;
@@ -107,7 +115,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 		is_running = RESET;
 
-		printf("%2d, %.4f\r\n", number_of_run, record);
+		printf("Run %2d, %.4f\r\n", number_of_run, record);
 
 		if(number_of_run != 5){
 			printf("\r\nRun %2d, Waiting...\r\n", number_of_run + 1);
